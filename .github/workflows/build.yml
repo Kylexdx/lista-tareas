@@ -21,8 +21,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
       - run: pip install flet
-      - run: flet build ${{ matrix.platform }}
+      - run: flet build ${{ matrix.platform }} --yes
       - uses: actions/upload-artifact@v4
         with:
           name: app-${{ matrix.platform }}
