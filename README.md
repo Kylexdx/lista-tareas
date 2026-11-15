@@ -1,4 +1,4 @@
-# Lista de tareas con Flet (entrega final ASO UD1)
+# Lista de tareas con Flet (entrega final ASO UD2)
 
 Aplicación de lista de tareas hecha con Flet a partir del paso 8 de "Mi primera app".
 
