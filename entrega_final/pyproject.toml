@@ -1,0 +1,14 @@
+[project]
+name = "lista-tareas"
+version = "1.0.0"
+description = "Lista de tareas con Flet - entrega final ASO UD1"
+requires-python = ">=3.10"
+# Solo dependencias directas de la app (y flet). Nada de 'pip freeze'.
+dependencies = [
+    "flet>=1.0.0",
+]
+
+[tool.flet]
+# Nombre que verá el usuario (ventana, lanzador, etc.)
+product = "Lista de tareas"
+org = "es.asir"
