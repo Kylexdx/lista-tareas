@@ -1,46 +1,29 @@
-# Compila la app Flet en la nube (GitHub Actions) para Web, Android, Linux y Windows.
-# Basado en el ejemplo oficial de https://flet.dev/docs/publish/ (action flet-build-action).
-# Se lanza solo en cada "git push" y también a mano desde la pestaña Actions.
 name: Build Flet App
-
-on:
-  push:
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
-    name: Build ${{ matrix.target }}
-    runs-on: ${{ matrix.runner }}
     strategy:
-      fail-fast: false          # si falla un destino, los demás siguen
+      fail-fast: false
       matrix:
         include:
-          - target: web
-            runner: ubuntu-latest
-          - target: apk
-            runner: ubuntu-latest
-          - target: linux
-            runner: ubuntu-latest
-          - target: windows
-            runner: windows-latest
-
+          - os: ubuntu-latest
+            platform: web
+          - os: ubuntu-latest
+            platform: apk
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: windows
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Build app
-        id: build
-        uses: flet-dev/flet-build-action@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          target: ${{ matrix.target }}
-          runner-python-version: "3.14"
-          bundled-python-version: "3.14"
-          build-number: ${{ github.run_number }}
-
-      - name: Upload build archive
-        uses: actions/upload-artifact@v7
+          python-version: "3.12"
+      - run: pip install flet
+      - run: flet build ${{ matrix.platform }}
+      - uses: actions/upload-artifact@v4
         with:
-          path: ${{ steps.build.outputs.archive-path }}
-          archive: false
-          if-no-files-found: error
-          overwrite: false
+          name: app-${{ matrix.platform }}
+          path: build/${{ matrix.platform }}
